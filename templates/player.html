@@ -1,0 +1,7 @@
+<video id="meuVideo" controls>
+    <source src="{{ url_for('static', filename='uploads/' + video_path) }}" type="video/mp4">
+</video>
+<div class="progress-bar">
+    <span id="progresso"></span>
+</div>
+<script src="{{ url_for('static', filename='js/player.js') }}"></script>

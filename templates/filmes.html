@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Filmes{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Filmes</h1>
+    <input type="text" id="search" placeholder="Pesquisar filmes...">
+</div>
+<div class="content-with-filters">
+    <aside class="filters">
+        <h3>Filtros</h3>
+        <label>Categoria:</label>
+        <select id="categoria">
+            <option value="">Todas</option>
+            <option value="Ação">Ação</option>
+            <option value="Comédia">Comédia</option>
+            <!-- etc -->
+        </select>
+        <label>Ordenar:</label>
+        <select id="ordenar">
+            <option value="titulo ASC">A-Z</option>
+            <option value="titulo DESC">Z-A</option>
+        </select>
+    </aside>
+    <div class="grid" id="filmes-grid">
+        <!-- Preenchido via JS ou Jinja -->
+    </div>
+</div>
+<script src="{{ url_for('static', filename='js/filmes.js') }}"></script>
+{% endblock %}

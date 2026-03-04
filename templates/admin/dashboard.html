@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Admin{% endblock %}
+{% block content %}
+<h1>Painel Administrativo</h1>
+<div class="stats">
+    <p>Filmes cadastrados: {{ total_filmes }}</p>
+    <p>Séries cadastradas: {{ total_series }}</p>
+    <p>Usuários registrados: {{ total_usuarios }}</p>
+</div>
+<div class="admin-options">
+    <a href="{{ url_for('admin_usuarios') }}">Gerenciar Usuários</a>
+    <a href="{{ url_for('admin_cadastro_conteudo') }}">Cadastrar Filmes/Séries</a>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Meu Site{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="{{ url_for('index') }}">Início</a>
+            <a href="{{ url_for('filmes') }}">Filmes</a>
+            <a href="{{ url_for('series') }}">Séries</a>
+            {% if session.usuario_admin == 1 %}
+            <a href="{{ url_for('admin_dashboard') }}">Admin</a>
+            {% endif %}
+        </div>
+        <div class="nav-right">
+            <a href="{{ url_for('favoritos') }}">❤️ Favoritos</a>
+            <a href="{{ url_for('perfil') }}">👤 Perfil</a>
+            <a href="{{ url_for('logout') }}">Sair</a>
+        </div>
+    </nav>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

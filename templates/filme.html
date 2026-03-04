@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}{{ filme.titulo }}{% endblock %}
+{% block content %}
+<div class="detalhes">
+    <img src="{{ filme.logo_url }}" alt="{{ filme.titulo }}" class="logo-filme">
+    <h1>{{ filme.titulo }}</h1>
+    <p>{{ filme.sinopse }}</p>
+    <button class="play-btn" data-id="{{ filme.id }}" data-tipo="filme">▶ Assistir</button>
+    <button class="favorito-btn" data-id="{{ filme.id }}" data-tipo="filme">❤️ Favoritar</button>
+</div>
+{% endblock %}
