@@ -15,6 +15,7 @@ def hash_senha(senha):
 
 def init_db():
     with get_db() as db:
+        # Tabelas
         db.execute('''
             CREATE TABLE IF NOT EXISTS usuarios (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -67,6 +68,33 @@ def init_db():
         ''')
         db.commit()
 
+        # Criar usuário administrador padrão se não existir
+        criar_admin_padrao(db)
+
+def criar_admin_padrao(db):
+    # Verifica se já existe algum admin
+    admin = db.execute('SELECT * FROM usuarios WHERE admin = 1 LIMIT 1').fetchone()
+    if not admin:
+        # Cria um admin padrão
+        email = 'admin@example.com'
+        senha = 'admin123'  # Em produção, use variável de ambiente
+        nome = 'Administrador'
+        senha_hash = hash_senha(senha)
+        try:
+            db.execute('''
+                INSERT INTO usuarios (email, senha, nome, admin)
+                VALUES (?, ?, ?, ?)
+            ''', (email, senha_hash, nome, 1))
+            db.commit()
+            print("Usuário administrador padrão criado:")
+            print(f"E-mail: {email}")
+            print(f"Senha: {senha}")
+            print("Altere essas credenciais após o primeiro login.")
+        except sqlite3.IntegrityError:
+            # Se o email já existir (improvável), não faz nada
+            pass
+
+# Funções auxiliares (já existiam)
 def get_favoritos(usuario_id):
     db = get_db()
     row = db.execute('SELECT favoritos FROM usuarios WHERE id = ?', (usuario_id,)).fetchone()
