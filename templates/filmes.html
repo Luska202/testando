@@ -13,7 +13,8 @@
             <option value="">Todas</option>
             <option value="Ação">Ação</option>
             <option value="Comédia">Comédia</option>
-            <!-- etc -->
+            <option value="Drama">Drama</option>
+            <option value="Terror">Terror</option>
         </select>
         <label>Ordenar:</label>
         <select id="ordenar">
@@ -21,9 +22,7 @@
             <option value="titulo DESC">Z-A</option>
         </select>
     </aside>
-    <div class="grid" id="filmes-grid">
-        <!-- Preenchido via JS ou Jinja -->
-    </div>
+    <div class="grid" id="filmes-grid"></div>
 </div>
 <script src="{{ url_for('static', filename='js/filmes.js') }}"></script>
 {% endblock %}

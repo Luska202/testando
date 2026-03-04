@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Editar {{ tipo }}{% endblock %}
+{% block content %}
+<h1>Editar {{ tipo|capitalize }}</h1>
+
+<form method="POST">
+    <label>Título:</label>
+    <input type="text" name="titulo" value="{{ item.titulo }}" required>
+
+    <label>Sinopse:</label>
+    <textarea name="sinopse" required>{{ item.sinopse }}</textarea>
+
+    <label>Categoria:</label>
+    <input type="text" name="categoria" value="{{ item.categoria }}" required>
+
+    <label>URL da Logo:</label>
+    <input type="url" name="logo_url" value="{{ item.logo_url }}" required>
+
+    {% if tipo == 'serie' %}
+    <label>Temporada:</label>
+    <input type="number" name="temporada" value="{{ item.temporada }}" min="1" required>
+    <label>Episódio:</label>
+    <input type="number" name="episodio" value="{{ item.episodio }}" min="1" required>
+    {% endif %}
+
+    <button type="submit">Salvar</button>
+</form>
+{% endblock %}

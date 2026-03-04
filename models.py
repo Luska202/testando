@@ -15,7 +15,6 @@ def hash_senha(senha):
 
 def init_db():
     with get_db() as db:
-        # Usuários
         db.execute('''
             CREATE TABLE IF NOT EXISTS usuarios (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -28,7 +27,6 @@ def init_db():
                 banned INTEGER DEFAULT 0
             )
         ''')
-        # Filmes
         db.execute('''
             CREATE TABLE IF NOT EXISTS filmes (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -40,7 +38,6 @@ def init_db():
                 data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         ''')
-        # Séries (cada episódio é um registro)
         db.execute('''
             CREATE TABLE IF NOT EXISTS series (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -55,7 +52,6 @@ def init_db():
                 UNIQUE(titulo, temporada, episodio)
             )
         ''')
-        # Progresso do usuário
         db.execute('''
             CREATE TABLE IF NOT EXISTS progresso (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -71,7 +67,6 @@ def init_db():
         ''')
         db.commit()
 
-# Funções auxiliares para manipular favoritos (JSON)
 def get_favoritos(usuario_id):
     db = get_db()
     row = db.execute('SELECT favoritos FROM usuarios WHERE id = ?', (usuario_id,)).fetchone()

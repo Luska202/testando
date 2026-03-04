@@ -1,35 +1,67 @@
-const video = document.getElementById('meuVideo');
-const videoId = video.dataset.id;
-const tipo = video.dataset.tipo;
-let temporada = video.dataset.temporada; // para séries
-let episodio = video.dataset.episodio;
+document.addEventListener('DOMContentLoaded', function() {
+    // Verifica se está na página de player
+    const video = document.getElementById('player');
+    if (!video) return;
 
-// Recuperar progresso salvo
-fetch(`/api/progresso?tipo=${tipo}&id=${videoId}&temp=${temporada}&ep=${episodio}`)
-    .then(res => res.json())
-    .then(data => {
-        if (data.tempo) {
-            video.currentTime = data.tempo;
+    const videoId = video.dataset.id;
+    const tipo = video.dataset.tipo;
+    const temporada = video.dataset.temporada;
+    const episodio = video.dataset.episodio;
+
+    // Carregar progresso salvo
+    const params = new URLSearchParams({ tipo, id: videoId });
+    if (temporada) params.append('temporada', temporada);
+    if (episodio) params.append('episodio', episodio);
+
+    fetch(`/api/progresso?${params}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.tempo) {
+                video.currentTime = data.tempo;
+            }
+        });
+
+    // Salvar progresso a cada 30 segundos
+    let saveInterval = setInterval(() => {
+        if (!video.paused && !video.ended) {
+            salvarProgresso();
         }
+    }, 30000);
+
+    // Salvar ao sair da página
+    window.addEventListener('beforeunload', function() {
+        clearInterval(saveInterval);
+        salvarProgressoBeacon();
     });
 
-// Salvar progresso a cada 30 segundos
-setInterval(() => {
-    const tempo = video.currentTime;
-    const duracao = video.duration;
-    fetch('/api/salvar_progresso', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-            tipo, id: videoId, temporada, episodio,
-            tempo_assistido: Math.floor(tempo),
-            duracao_total: Math.floor(duracao)
-        })
-    });
-}, 30000);
+    function salvarProgresso() {
+        const tempo = Math.floor(video.currentTime);
+        const duracao = Math.floor(video.duration);
+        fetch('/api/salvar_progresso', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                id: videoId,
+                tipo: tipo,
+                temporada: temporada,
+                episodio: episodio,
+                tempo_assistido: tempo,
+                duracao_total: duracao
+            })
+        });
+    }
 
-// Ao fechar a página, salvar uma última vez
-window.addEventListener('beforeunload', () => {
-    // Síncrono não é possível, mas podemos usar beacon
-    navigator.sendBeacon('/api/salvar_progresso', JSON.stringify({...}));
+    function salvarProgressoBeacon() {
+        const tempo = Math.floor(video.currentTime);
+        const duracao = Math.floor(video.duration);
+        const data = JSON.stringify({
+            id: videoId,
+            tipo: tipo,
+            temporada: temporada,
+            episodio: episodio,
+            tempo_assistido: tempo,
+            duracao_total: duracao
+        });
+        navigator.sendBeacon('/api/salvar_progresso', data);
+    }
 });

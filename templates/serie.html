@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ serie.titulo }}{% endblock %}
+{% block content %}
+<div class="detalhes">
+    <img src="{{ serie.logo_url }}" alt="{{ serie.titulo }}" class="logo-serie">
+    <h1>{{ serie.titulo }}</h1>
+    <p class="sinopse">{{ serie.sinopse }}</p>
+    <div class="acoes">
+        <button class="favorito-btn" data-id="{{ serie.id }}" data-tipo="serie">❤️ Favoritar</button>
+    </div>
+</div>
+
+<h2>Temporadas e Episódios</h2>
+<div class="episodios">
+    {% for ep in episodios %}
+    <div class="episodio-card">
+        <h3>Temporada {{ ep.temporada }} - Episódio {{ ep.episodio }}</h3>
+        <button class="play-episodio" onclick="window.location.href='/player/serie/{{ ep.id }}?temporada={{ ep.temporada }}&episodio={{ ep.episodio }}'">▶ Assistir</button>
+    </div>
+    {% endfor %}
+</div>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% endblock %}

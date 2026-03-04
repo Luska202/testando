@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Cadastrar Conteúdo{% endblock %}
+{% block content %}
+<h1>Cadastrar Filme ou Série</h1>
+
+<form method="POST" enctype="multipart/form-data">
+    <label>Tipo:</label>
+    <select name="tipo" id="tipo">
+        <option value="filme">Filme</option>
+        <option value="serie">Série</option>
+    </select>
+
+    <label>Título:</label>
+    <input type="text" name="titulo" required>
+
+    <label>Sinopse:</label>
+    <textarea name="sinopse" required></textarea>
+
+    <label>Categoria:</label>
+    <input type="text" name="categoria" required>
+
+    <label>URL da Logo:</label>
+    <input type="url" name="logo_url" required>
+
+    <label>Vídeo:</label>
+    <input type="file" name="video" accept="video/*" required>
+
+    <div id="serie-fields" style="display:none;">
+        <label>Temporada:</label>
+        <input type="number" name="temporada" min="1">
+        <label>Episódio:</label>
+        <input type="number" name="episodio" min="1">
+    </div>
+
+    <button type="submit">Cadastrar</button>
+</form>
+
+<h2>Conteúdos Cadastrados</h2>
+<input type="text" id="search-conteudo" placeholder="Pesquisar por título ou ID">
+<table id="conteudos-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Tipo</th>
+            <th>Categoria</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in conteudos %}
+        <tr>
+            <td>{{ item.id }}</td>
+            <td>{{ item.titulo }}</td>
+            <td>{{ item.tipo }}</td>
+            <td>{{ item.categoria }}</td>
+            <td>
+                <a href="{{ url_for('admin_editar_conteudo', tipo=item.tipo, id=item.id) }}">Editar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+    document.getElementById('tipo').addEventListener('change', function() {
+        document.getElementById('serie-fields').style.display = this.value === 'serie' ? 'block' : 'none';
+    });
+    document.getElementById('search-conteudo').addEventListener('input', function() {
+        const term = this.value.toLowerCase();
+        document.querySelectorAll('#conteudos-table tbody tr').forEach(row => {
+            const text = row.innerText.toLowerCase();
+            row.style.display = text.includes(term) ? '' : 'none';
+        });
+    });
+</script>
+{% endblock %}

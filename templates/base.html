@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Meu Site{% endblock %}</title>
+    <title>{% block title %}Streaming{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     {% block extra_css %}{% endblock %}
 </head>
@@ -18,9 +18,9 @@
             {% endif %}
         </div>
         <div class="nav-right">
-            <a href="{{ url_for('favoritos') }}">❤️ Favoritos</a>
-            <a href="{{ url_for('perfil') }}">👤 Perfil</a>
-            <a href="{{ url_for('logout') }}">Sair</a>
+            <a href="{{ url_for('favoritos') }}" class="favoritos-link">❤️ Favoritos</a>
+            <a href="{{ url_for('perfil') }}" class="perfil-link">👤 Perfil</a>
+            <a href="{{ url_for('logout') }}" class="logout-link">Sair</a>
         </div>
     </nav>
     <main>

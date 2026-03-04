@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Início{% endblock %}
+{% block content %}
+<h1>Bem-vindo, {{ session.usuario_nome }}</h1>
+
+<section>
+    <h2>Últimos Filmes Adicionados</h2>
+    <div class="grid">
+        {% for filme in ultimos_filmes %}
+        <div class="card" data-id="{{ filme.id }}" data-tipo="filme">
+            <img src="{{ filme.logo_url }}" alt="{{ filme.titulo }}">
+            <h3>{{ filme.titulo }}</h3>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section>
+    <h2>Últimas Séries Adicionadas</h2>
+    <div class="grid">
+        {% for serie in ultimos_series %}
+        <div class="card" data-id="{{ serie.id }}" data-tipo="serie">
+            <img src="{{ serie.logo_url }}" alt="{{ serie.titulo }}">
+            <h3>{{ serie.titulo }}</h3>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section>
+    <h2>Continuar Assistindo</h2>
+    <div class="grid">
+        {% for item in ultimos_assistidos %}
+        <div class="card" data-id="{{ item.id }}" data-tipo="{{ item.tipo }}">
+            <img src="{{ item.logo_url }}" alt="{{ item.titulo }}">
+            <h3>{{ item.titulo }}</h3>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<script>
+    document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('click', () => {
+            const id = card.dataset.id;
+            const tipo = card.dataset.tipo;
+            window.location.href = `/${tipo}/${id}`;
+        });
+    });
+</script>
+{% endblock %}

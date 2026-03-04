@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Meus Favoritos{% endblock %}
+{% block content %}
+<h1>Meus Favoritos</h1>
+<div class="grid">
+    {% for item in itens %}
+    <div class="card" data-id="{{ item.id }}" data-tipo="{{ item.tipo }}">
+        <img src="{{ item.logo_url }}" alt="{{ item.titulo }}">
+        <h3>{{ item.titulo }}</h3>
+    </div>
+    {% endfor %}
+</div>
+<script>
+    document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('click', () => {
+            window.location.href = `/${card.dataset.tipo}/${card.dataset.id}`;
+        });
+    });
+</script>
+{% endblock %}

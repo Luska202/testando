@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Gerenciar Usuários{% endblock %}
+{% block content %}
+<h1>Gerenciar Usuários</h1>
+
+<h2>Adicionar Novo Usuário</h2>
+<form method="POST">
+    <input type="hidden" name="acao" value="criar">
+    <input type="email" name="email" placeholder="E-mail" required>
+    <input type="password" name="senha" placeholder="Senha" required>
+    <button type="submit">Criar</button>
+</form>
+
+<h2>Usuários Cadastrados</h2>
+<table>
+    <thead>
+        <tr>
+            <th>E-mail</th>
+            <th>Admin</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in usuarios %}
+        <tr>
+            <td>{{ user.email }}</td>
+            <td>{{ 'Sim' if user.admin else 'Não' }}</td>
+            <td>
+                <form method="POST" style="display:inline;">
+                    <input type="hidden" name="usuario_id" value="{{ user.id }}">
+                    <input type="hidden" name="acao" value="toggle_admin">
+                    <button type="submit">Toggle Admin</button>
+                </form>
+                <form method="POST" style="display:inline;">
+                    <input type="hidden" name="usuario_id" value="{{ user.id }}">
+                    <input type="hidden" name="acao" value="banir">
+                    <button type="submit">Banir</button>
+                </form>
+                <form method="POST" style="display:inline;">
+                    <input type="hidden" name="usuario_id" value="{{ user.id }}">
+                    <input type="hidden" name="acao" value="excluir">
+                    <button type="submit">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
