@@ -614,6 +614,24 @@ td button:hover {
     color: var(--text);
 }
 
+td a {
+    background-color: transparent;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin: 0 0.2rem;
+    display: inline-block;
+    transition: var(--transition);
+}
+
+td a:hover {
+    background-color: var(--primary);
+    color: var(--text);
+}
+
 /* Formulários admin */
 form {
     background: var(--surface);

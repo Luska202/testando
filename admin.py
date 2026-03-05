@@ -26,6 +26,8 @@ def init_admin_routes(app):
             elif acao == 'banir':
                 db.execute('UPDATE usuarios SET banned = 1 WHERE id = ?', (usuario_id,))
             elif acao == 'excluir':
+                # Remove progresso do usuário antes de excluir
+                db.execute('DELETE FROM progresso WHERE usuario_id = ?', (usuario_id,))
                 db.execute('DELETE FROM usuarios WHERE id = ?', (usuario_id,))
             elif acao == 'criar':
                 email = request.form['email']
@@ -97,3 +99,27 @@ def init_admin_routes(app):
             return redirect(url_for('admin_cadastro_conteudo'))
         item = db.execute(f'SELECT * FROM {tabela} WHERE id=?', (id,)).fetchone()
         return render_template('admin/editar_conteudo.html', item=item, tipo=tipo)
+
+    @app.route('/admin/excluir/<tipo>/<int:id>', methods=['POST'])
+    @admin_required
+    def admin_excluir_conteudo(tipo, id):
+        db = get_db()
+        if tipo == 'filme':
+            tabela = 'filmes'
+        else:
+            tabela = 'series'
+        # Obter caminho do vídeo para deletar o arquivo
+        item = db.execute(f'SELECT video_path FROM {tabela} WHERE id = ?', (id,)).fetchone()
+        if item and item['video_path']:
+            try:
+                video_path = os.path.join('static', item['video_path'])
+                if os.path.exists(video_path):
+                    os.remove(video_path)
+            except Exception as e:
+                print(f"Erro ao deletar arquivo: {e}")
+        # Remover registros de progresso associados
+        db.execute('DELETE FROM progresso WHERE conteudo_id = ? AND tipo = ?', (id, tipo))
+        # Remover o conteúdo
+        db.execute(f'DELETE FROM {tabela} WHERE id = ?', (id,))
+        db.commit()
+        return redirect(url_for('admin_cadastro_conteudo'))
